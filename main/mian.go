@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 )
 
@@ -31,6 +32,11 @@ func main() {
 	digits := []int{9, 9, 9, 9}
 	res5 := plusOne(digits)
 	fmt.Println(res5)
+
+	// 合并区间
+	intervals := [][]int{{1, 3}, {2, 6}, {8, 10}, {15, 18}}
+	res6 := merge(intervals)
+	fmt.Println(res6)
 
 	// 两数之和
 	nums1 := []int{2, 7, 11, 15}
@@ -176,6 +182,29 @@ func plusOne(digits []int) []int {
 		return append([]int{1}, digits...)
 	}
 	return digits
+}
+
+// 合并区间
+// https://leetcode.cn/problems/merge-intervals/description/
+func merge(intervals [][]int) [][]int {
+	slices.SortFunc(intervals, func(a, b []int) int { return a[0] - b[0] })
+	res := [][]int{}
+	for _, p := range intervals {
+		m := len(res)
+		if m > 0 && p[0] <= res[m-1][1] {
+			res[m-1][1] = max(res[m-1][1], p[1])
+		} else {
+			res = append(res, p)
+		}
+	}
+	return res
+
+}
+func max(a int, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 // 两数之和
